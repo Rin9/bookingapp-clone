@@ -7,6 +7,9 @@ module.exports = {
       },
       colors: {
         "main-blue": "#0b3580",
+        "main-blue-light": "#5471a6",
+        "button-blue": "#0f71c2",
+        "button-blue-dark": "#094374",
       },
     },
   },

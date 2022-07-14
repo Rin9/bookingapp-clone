@@ -5,10 +5,15 @@ import {
   AiOutlineEdit,
   AiOutlineUserAdd,
   AiOutlineLogin,
+  AiOutlineLogout,
 } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+import { ClipLoader } from "react-spinners";
 
 const DropDown = ({ menu = [] }) => {
+  //use auth0 login method
+  const { loginWithRedirect, isAuthenticated, isLoading, logout } = useAuth0();
   return (
     <div>
       <Menu as="div" className="relative inline-block text-left">
@@ -50,10 +55,10 @@ const DropDown = ({ menu = [] }) => {
                 </Menu.Item>
               </div>
               <div className="px-1 py-1">
-                <Menu.Item>
+                {/* <Menu.Item>
                   {({ active }) => (
-                    <Link
-                      to={"/auth"}
+                    <button
+                      onClick={() => loginWithRedirect()}
                       className={`${
                         active ? "bg-main-blue text-white" : "text-gray-900"
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
@@ -63,23 +68,48 @@ const DropDown = ({ menu = [] }) => {
                         aria-hidden="true"
                       />
                       Register
-                    </Link>
+                    </button>
                   )}
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item>
-                  {({ active }) => (
-                    <Link
-                      to={"/auth"}
-                      className={`${
-                        active ? "bg-main-blue text-white" : "text-gray-900"
-                      } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                  {isLoading ? (
+                    <div
+                      className={`group flex w-full items-center justify-center rounded-md px-2 py-2 text-sm`}
                     >
-                      <AiOutlineLogin
-                        className="mr-2 h-5 w-5"
-                        aria-hidden="true"
-                      />
-                      Login
-                    </Link>
+                      <ClipLoader size={20} color={"#0f70c2"} />
+                    </div>
+                  ) : isAuthenticated ? (
+                    ({ active }) => (
+                      <button
+                        onClick={() =>
+                          logout({ returnTo: window.location.origin })
+                        }
+                        className={`${
+                          active ? "bg-main-blue text-white" : "text-gray-900"
+                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                      >
+                        <AiOutlineLogout
+                          className="mr-2 h-5 w-5"
+                          aria-hidden="true"
+                        />
+                        Logout
+                      </button>
+                    )
+                  ) : (
+                    ({ active }) => (
+                      <button
+                        onClick={() => loginWithRedirect()}
+                        className={`${
+                          active ? "bg-main-blue text-white" : "text-gray-900"
+                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                      >
+                        <AiOutlineLogin
+                          className="mr-2 h-5 w-5"
+                          aria-hidden="true"
+                        />
+                        Login
+                      </button>
+                    )
                   )}
                 </Menu.Item>
               </div>
